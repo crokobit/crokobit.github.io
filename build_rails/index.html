@@ -1,0 +1,197 @@
+	<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.14" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title> build_rails &middot; Wanderer </title>
+
+  
+  <link rel="stylesheet" href="http://crokobit.github.io/css/poole.css">
+  <link rel="stylesheet" href="http://crokobit.github.io/css/syntax.css">
+  <link rel="stylesheet" href="http://crokobit.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="Wanderer" />
+</head>
+
+	<body class="">
+		<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://crokobit.github.io/"><h1>Wanderer</h1></a>
+      <p class="lead">
+      An elegant open source and mobile first theme for <a href="http://hugo.spf13.com">hugo</a> made by <a href="http://twitter.com/mdo">@mdo</a>. Originally made for Jekyll.
+      </p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li><a href="/">Home</a> </li>
+      
+    </ul>
+
+    <p>&copy; 2016. All rights reserved. </p>
+  </div>
+</div>
+
+
+		<div class="content container">
+			<div class="post">
+			 	<h1>build_rails</h1>
+			  <span class="post-date">Sun, Jan 10, 2016</span>
+			      
+
+<p>ch1</p>
+
+<p>gem build rulers</p>
+
+<p>cd rulers</p>
+
+<p>vi rulers.gemspec</p>
+
+<pre><code class="language-ruby">     spec.add_runtime_dependency &quot;rack&quot;
+</code></pre>
+
+<p>gem build rulers.gemspec (is raise error &lsquo;contain itself &hellip;&rsquo; change version at &lsquo;lib/rulers/version.rb&rsquo;)</p>
+
+<p>gem install rulers (install generated rulers-0.1.0.gem)</p>
+
+<p>Then we can use the gem</p>
+
+<p>create a dir for using rulers gem</p>
+
+<p>mkdir best_quotes</p>
+
+<p>vi Gemfile</p>
+
+<pre><code>    source 'https://rubygems.org'
+    gem 'rulers'
+</code></pre>
+
+<p>bundle</p>
+
+<p>bundle will use Gemfile as reference for install gems</p>
+
+<p>vi config.ru # this is a file for rack xxx?</p>
+
+<pre><code>    run proc {
+        [
+              200, # status conde
+              {''Content-Type' =&gt; 'text/html'}, #header
+              ['HELLO WORLD !'] #content
+         ]
+     }
+</code></pre>
+
+<p>##header
+“The important one for us right now is ‘Content-Type’, which must be ‘text/html’.  That just lets the browser know that we want the page rendered as HTML rather than text, JSON, XML, RSS or something else.”</p>
+
+<h1 id="then-upgrade-rullers:b3e38af64de845d4d23661d59b1ccc3d">Then upgrade rullers</h1>
+
+<p>“Making Rulers Use Rack”</p>
+
+<p>rackup -p 3001</p>
+
+<p>this command will search config.ru</p>
+
+<p>cd rulers</p>
+
+<p>vi lib/rulers.rb</p>
+
+<pre><code class="language-ruby">require &quot;rulers/version&quot;
+
+module Rulers
+    class Application
+        def call(env)
+            [
+                200,
+                {'Content-Type' =&gt; 'text/html'},
+                ['HELLO,WORLD!']
+            ]
+        end
+    end
+end
+</code></pre>
+
+<p>upgrade version to avoid &lsquo;contain itself error&rsquo;</p>
+
+<p>vi lib/rulers/version.rb</p>
+
+<pre><code>module Rulers
+     VERSION = &quot;0.1.1&quot;
+end
+</code></pre>
+
+<p>gem build rulers.gemspec
+gem install rulers</p>
+
+<p>cd best_quotes</p>
+
+<p>bundle</p>
+
+<p>vi config/application.rb</p>
+
+<pre><code class="language-ruby">require 'rulers'
+module BestQuotes
+    class Application &lt; Rulers::Application
+
+    end
+end
+</code></pre>
+
+<p>vi config.ru</p>
+
+<pre><code>require './config/application' # imp!
+run BestQuotes::Application.new # I do not know why this code work after moving some code to
+#call(env) ... 
+#WHY? see rack website
+</code></pre>
+
+<p>##rack
+<a href="http://rack.github.io/">http://rack.github.io/</a></p>
+
+<p>Rack provides a minimal interface between webservers that support Ruby and Ruby frameworks.</p>
+
+<p>To use Rack, provide an &ldquo;app&rdquo;: an object that responds to the call method, taking the environment hash as a parameter, and returning an Array with three elements:</p>
+
+<p>The HTTP response code
+A Hash of headers
+The response body, which must respond to each</p>
+
+<pre><code># my_rack_app.rb
+ 
+require 'rack'
+ 
+app = Proc.new do |env|
+    ['200', {'Content-Type' =&gt; 'text/html'}, ['A barebones rack app.']]
+end
+ 
+Rack::Handler::WEBrick.run app
+
+</code></pre>
+
+<p>Or</p>
+
+<p>Or, you can use the rackup command line tool and avoid specifying details like port and server until runtime:</p>
+
+<pre><code>
+# config.ru
+ run Proc.new { |env| ['200', {'Content-Type' =&gt; 'text/html'}, ['get rack\'d']] }
+</code></pre>
+
+			</div>
+
+			
+		</div>
+
+  </body>
+</html>

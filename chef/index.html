@@ -1,0 +1,366 @@
+	<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.14" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title> chef &middot; Wanderer </title>
+
+  
+  <link rel="stylesheet" href="http://crokobit.github.io/css/poole.css">
+  <link rel="stylesheet" href="http://crokobit.github.io/css/syntax.css">
+  <link rel="stylesheet" href="http://crokobit.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="Wanderer" />
+</head>
+
+	<body class="">
+		<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://crokobit.github.io/"><h1>Wanderer</h1></a>
+      <p class="lead">
+      An elegant open source and mobile first theme for <a href="http://hugo.spf13.com">hugo</a> made by <a href="http://twitter.com/mdo">@mdo</a>. Originally made for Jekyll.
+      </p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li><a href="/">Home</a> </li>
+      
+    </ul>
+
+    <p>&copy; 2016. All rights reserved. </p>
+  </div>
+</div>
+
+
+		<div class="content container">
+			<div class="post">
+			 	<h1>chef</h1>
+			  <span class="post-date">Thu, Dec 17, 2015</span>
+			      
+
+<h1 id="chef-note:33201a3ee4c6d66b2206397a340d1a9e">CHEF NOTE</h1>
+
+<h2 id="note-of-following-guides:33201a3ee4c6d66b2206397a340d1a9e">NOTE OF FOLLOWING GUIDES</h2>
+
+<pre><code>  Learn the Chef basics
+  Learn to manage a node
+  Learn to manage a basic web application
+  Learn to develop your infrastructure code locally
+</code></pre>
+
+<p><a href="https://learn.chef.io/tutorials/">Guide Link</a></p>
+
+<h2 id="generating-chef-repo:33201a3ee4c6d66b2206397a340d1a9e">Generating chef repo</h2>
+
+<ul>
+<li><p>Usually this is done by download starter kit form chef server. The setting will be included automatically.</p></li>
+
+<li><p><code>chef generate repo ~/chef-repo</code> A chef resource describe the state of specific file, template or package.</p></li>
+</ul>
+
+<h2 id="recipe:33201a3ee4c6d66b2206397a340d1a9e">Recipe</h2>
+
+<ul>
+<li>A receipe is a file contains related resources, configure of web server, database server, or load balancer.</li>
+</ul>
+
+<h2 id="run-on-server:33201a3ee4c6d66b2206397a340d1a9e">Run on server</h2>
+
+<ul>
+<li><code>chef-client</code> fetch recipes and start running chef on server.</li>
+<li><code>sudo chef-client --local-mode --runlist 'recipe[learn_chef_apache2]'</code></li>
+<li>runlist, deciding order and which recipe need to be run.</li>
+<li>debug <code>sudo chef-client -l debug</code></li>
+</ul>
+
+<h2 id="chef-server-opscode-server:33201a3ee4c6d66b2206397a340d1a9e">Chef server (Opscode server)</h2>
+
+<ul>
+<li>A chef server is a repository that save cookbooks and node informations.</li>
+</ul>
+
+<h2 id="cookbook:33201a3ee4c6d66b2206397a340d1a9e">Cookbook</h2>
+
+<ul>
+<li><code>knife cookbook upload learn_chef_apache2</code></li>
+<li>can download cookbooks from supermarket, a opensource cookbook community. <a href="https://supermarket.chef.io/cookbooks">link</a></li>
+<li><code>knife cookbook site download learn_chef_apache2</code>, download from supermarket</li>
+<li><code>chef generate cookbook cookbooks/awesome_customers</code> Generating cookbook.</li>
+<li><code>knife cookbook site show xxx | grep latest_version</code> Showing xxx versions in chef supermarcket</li>
+<li>pining, specificying the version of cookbook in metadata.rb .
+chef will update the cookbook form chef supermarcket by the version.
+
+<ul>
+<li>~&gt; x.y.z means greate than x.y but smaller than x.y+1 . z changes means bug fixes or patches.
+Generating recipe</li>
+</ul></li>
+<li>chef generate recipe cookbooks/awesome_customers user</li>
+<li>include recipe in cookbook/recipes/default.rb <code>include_recipe 'cookbookxxx::yyy'</code> means it will run that recipe when running r</li>
+</ul>
+
+<h3 id="delete-cookbook-from-chef-server:33201a3ee4c6d66b2206397a340d1a9e">delete cookbook from Chef server</h3>
+
+<ul>
+<li>knife cookbook delete <cookbook-name>
+remove berkshelf cookbook locally</li>
+<li>rm -r ~/.berkshelf/cookbooks
+delete repo</li>
+<li>rm -r ~/chef-repo
+Delete the node from the Chef server</li>
+<li>knife node delete web_app_ubuntu &ndash;yes</li>
+</ul>
+
+<p>.erb means it can hold placeholders, filled in when recipe runs.
+  <a href="https://supermarket.chef.io/cookbooks">https://supermarket.chef.io/cookbooks</a>.
+_</p>
+
+<h2 id="node:33201a3ee4c6d66b2206397a340d1a9e">Node</h2>
+
+<ul>
+<li>Node object is a object that contains its information, saved in chef server. The object will be loaded to node&rsquo;s memory when knife xxx. ? (link)[<a href="https://docs.chef.io/attributes.html#automatic-ohai">https://docs.chef.io/attributes.html#automatic-ohai</a>]</li>
+<li>A node is a computer, VM, container, or a phycial server managed by a chef.</li>
+<li>Bootstraping the node is the process installing chef-client on a node.</li>
+<li><code>knife boorstrasp</code> is a one time process, association the node to chef server and apply cookbook.</li>
+<li><code>knife bootstrap</code> will download the chef-client to and cookbook to node and apply the cookbook.</li>
+<li>set node.chef_environment by <code>knife bootstrap .... -E staging</code></li>
+</ul>
+
+<p>later, if just needing to apply cookbook change, use knife ssh.</p>
+
+<h2 id="provisioning-example:33201a3ee4c6d66b2206397a340d1a9e">Provisioning example</h2>
+
+<ul>
+<li><code>knife cookbook upload</code></li>
+<li><code>knife bootstrap ADDRESS --ssh-user USER --ssh-password 'PASSWORD' --sudo --use-sudo-password --node-name node1 --run-list 'recipe[learn_chef_apache2]'</code>
+
+<ul>
+<li>&ndash;node-name is the unique identifier for chef server</li>
+<li>ADDRESS needs public IP.</li>
+</ul></li>
+<li><code>knife node list</code></li>
+<li><code>knife node show</code>
+knife ssh is for applying changed cookbook to a node after the node is bootstraped.</li>
+<li><code>knife ssh ADDRESS 'sudo chef-client' --manual-list --ssh-user USER --ssh-password 'PASSWORD'</code>
+knife with ssh key</li>
+<li><code>knife bootstrap ADDRESS --ssh-user USER --sudo --identity-file IDENTITY_FILE --node-name web_app_ubuntu --run-list 'recipe[awesome_customers]'</code>
+
+<ul>
+<li>IDENTITY_FILE is the ssh key location.</li>
+</ul></li>
+</ul>
+
+<h2 id="attribute:33201a3ee4c6d66b2206397a340d1a9e">Attribute</h2>
+
+<ul>
+<li><code>chef generate attribute cookbooks/awesome_customers default</code> Defining customized node attributes</li>
+<li>DRY the reusable content to attribute/ , use node[&lsquo;xxx&rsquo;] to access.</li>
+</ul>
+
+<h2 id="cookbook-versioning:33201a3ee4c6d66b2206397a340d1a9e">Cookbook Versioning</h2>
+
+<h3 id="berkshelf:33201a3ee4c6d66b2206397a340d1a9e">Berkshelf</h3>
+
+<ul>
+<li>in xxx bookbook, <code>berks install</code> will fetch dependency cookbooks to local env. Saving under ./berkshelf/cookbooks/
+under xxx cookbook folder. cookbook/xxx/</li>
+<li>then, use <code>berk upload</code> to upload cookbooks, dependency cookbooks included,</li>
+<li><code>knife cookbook list</code> Check is success or not</li>
+</ul>
+
+<h3 id="chef-librian:33201a3ee4c6d66b2206397a340d1a9e">Chef Librian</h3>
+
+<ul>
+<li><code>librian-chef install</code></li>
+</ul>
+
+<h3 id="down-all-data-from-chef-server:33201a3ee4c6d66b2206397a340d1a9e">down all data from chef server</h3>
+
+<ul>
+<li><code>knife download /</code></li>
+</ul>
+
+<h1 id="data-bag:33201a3ee4c6d66b2206397a340d1a9e">Data Bag</h1>
+
+<ul>
+<li>values shared among nodes.</li>
+
+<li><p>can be encrypted optionally.</p>
+
+<h2 id="encrypted:33201a3ee4c6d66b2206397a340d1a9e">encrypted</h2></li>
+
+<li><p>generate a key to encrypt databag item</p></li>
+</ul>
+
+<p><code>openssl rand -base64 512 | tr -d '\r\n' &gt; /tmp/encrypted_data_bag_secret</code></p>
+
+<ul>
+<li>uploading to node use scp command.</li>
+</ul>
+
+<p><code>scp -i ~/.ssh/my.pem /tmp/encrypted_data_bag_secret ubuntu@52.10.205.36:/etc/chef</code></p>
+
+<ul>
+<li>creating data bag at chef server. (will do nothing at local)</li>
+</ul>
+
+<p><code>knife data bag create passwords</code></p>
+
+<ul>
+<li><p>create local data.</p>
+
+<ul>
+<li>p.s. Not in cookbook! but in chef-repo, chef-repo/data_bags/passwords/, data bags are used by everybody cookbooks</li>
+</ul>
+
+<p><code>mkdir databags/passwords</code></p></li>
+
+<li><p>create data json file in databags/passwords</p></li>
+
+<li><p>update the password to Chef server with encryption, local file remain unencrypted
+<code>knife data bag from file passwords sql_server_root_password.json --secret-file /tmp/encrypted_data_bag_secret</code>
+verfy</p></li>
+</ul>
+
+<p><code>knife data bag show passwords sql_server_root_password</code></p>
+
+<ul>
+<li>can verify with encrypt key file
+<code>knife data bag show passwords sql_server_root_password --secret-file /tmp/encrypted_data_bag_secret</code></li>
+<li>encrypt the json file locally
+<code>knife data bag from file passwords sql_server_root_password.json --secret-file /tmp/encrypted_data_bag_secret --local-mode</code></li>
+</ul>
+
+<h2 id="template:33201a3ee4c6d66b2206397a340d1a9e">Template</h2>
+
+<ul>
+<li>A template is a single, general, customized recipe for specific node as recipe runs.</li>
+</ul>
+
+<h2 id="knife-ssh:33201a3ee4c6d66b2206397a340d1a9e">knife ssh</h2>
+
+<ul>
+<li><code>Knife ssh</code> will invokes the command pecified over an SSH connection on a node - here is chef-client.</li>
+<li>No need to specify the run list, cookbook, because it is set up by bootstraping.</li>
+<li>&lsquo;sudo chef-client&rsquo; is nessary for reapply cookbook. Without that, knife ssh just update cookbook, not apply it.</li>
+</ul>
+
+<h1 id="test-it-locally:33201a3ee4c6d66b2206397a340d1a9e">Test it locally</h1>
+
+<h2 id="test-kitchen:33201a3ee4c6d66b2206397a340d1a9e">Test Kitchen</h2>
+
+<ul>
+<li>Test Kitchen enables you to test cookboos in a temporary environment.</li>
+<li>install vagrant and virtual-box (<a href="http://sourabhbajaj.com/mac-setup/Vagrant/README.html">http://sourabhbajaj.com/mac-setup/Vagrant/README.html</a>)</li>
+<li><code>.kitchen.ymla will be created automacally when creating cookbook using</code>chef generate cookbook motd`</li>
+
+<li><p>modify .kitchen.yml in cookbook.</p>
+
+<ul>
+<li>driver specifies the software that manages the machine. We&rsquo;re using Vagrant.</li>
+<li>provisioner specifies how to run Chef.</li>
+<li>platforms specifies the target operating systems.</li>
+<li>suites specifies what - e.g. cookbook - we want to apply to the virtual environment.</li>
+</ul></li>
+
+<li><p><code>kitchen list</code> list virtual environments create virtual enviroments</p></li>
+
+<li><p><code>kitchen create</code> apply cookbook</p></li>
+
+<li><p><code>kitchen converge, slower at first time because it need to install chef-client, will create instance if not created yet</code>
+login to instance</p></li>
+
+<li><p><code>kitchen login</code> logout in instance after login</p></li>
+
+<li><p><code>logout</code> delete instance</p></li>
+
+<li><p><code>kitchen destroy</code></p></li>
+</ul>
+
+<h1 id="assign-ip-cookbook-and-data-bag-in-kitchen-yml:33201a3ee4c6d66b2206397a340d1a9e">assign ip, cookbook and data bag in .kitchen.yml</h1>
+
+<pre><code class="language-yml">driver:
+  network:
+  - [&quot;private_network&quot;, {ip: &quot;x.x.x.x&quot;}]
+suits:
+  - name: default
+    data_bags_path: &quot;../../data_bags&quot;
+    run_list:
+      - recipe[awesome_customers::default]
+    attributes:
+      awesome_customers:
+        passwords:
+          secret_path: 'tmp/kitchen/encrypted_data_bag_secret'
+</code></pre>
+
+<h2 id="chef-client-dry-run-why-run:33201a3ee4c6d66b2206397a340d1a9e">chef-client dry run (why-run)</h2>
+
+<p>chef-client &ndash;why-run
+chef-client -W</p>
+
+<h2 id="chef-environment:33201a3ee4c6d66b2206397a340d1a9e">chef_environment</h2>
+
+<ul>
+<li>set
+
+<ul>
+<li>set in recipe</li>
+<li>set when bootstraping</li>
+<li>(<a href="https://docs.chef.io/environments.html">https://docs.chef.io/environments.html</a>)</li>
+</ul></li>
+<li>use
+
+<ul>
+<li>node.chef_environment</li>
+<li>Specifically, chef_environment is a method on the Chef::Node object that returns the value of the node&rsquo;s environment. It is not a node attribute and should not be confused as such.</li>
+<li>(<a href="http://serverfault.com/questions/417696/how-to-find-the-chef-environment-in-a-recipe">http://serverfault.com/questions/417696/how-to-find-the-chef-environment-in-a-recipe</a>)</li>
+</ul></li>
+</ul>
+
+<h1 id="after-upgrade-passenger-and-ruby:33201a3ee4c6d66b2206397a340d1a9e">after upgrade passenger and ruby</h1>
+
+<ul>
+<li>sudo chef-client</li>
+</ul>
+
+<p>see Apache2 be starting or not
+- service &ndash;status-all</p>
+
+<p>see Apache or Passenger is the new one or not
+- ps aux</p>
+
+<p>restart Apache2
+- sudo service apache2 restart</p>
+
+<p>tell passenger to restart
+- touch tmp/restart.txt</p>
+
+<p>apache folder
+/etc/apache2/
+/etc/apache2/mods-available
+/etc/apache2/mods-enables</p>
+
+<p>update .ruby-version</p>
+
+<p>##Debug log
+rails_proj/log/
+/var/apache2/log/&hellip;</p>
+
+			</div>
+
+			
+		</div>
+
+  </body>
+</html>

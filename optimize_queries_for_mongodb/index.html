@@ -1,0 +1,187 @@
+	<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.14" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title> optimize_queries_for_mongodb &middot; Wanderer </title>
+
+  
+  <link rel="stylesheet" href="http://crokobit.github.io/css/poole.css">
+  <link rel="stylesheet" href="http://crokobit.github.io/css/syntax.css">
+  <link rel="stylesheet" href="http://crokobit.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="Wanderer" />
+</head>
+
+	<body class="">
+		<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://crokobit.github.io/"><h1>Wanderer</h1></a>
+      <p class="lead">
+      An elegant open source and mobile first theme for <a href="http://hugo.spf13.com">hugo</a> made by <a href="http://twitter.com/mdo">@mdo</a>. Originally made for Jekyll.
+      </p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li><a href="/">Home</a> </li>
+      
+    </ul>
+
+    <p>&copy; 2016. All rights reserved. </p>
+  </div>
+</div>
+
+
+		<div class="content container">
+			<div class="post">
+			 	<h1>optimize_queries_for_mongodb</h1>
+			  <span class="post-date">Sat, Nov 28, 2015</span>
+			      
+
+<h1 id="get-mongodb-log:7037657cc708704df4e0a6506b8cb51b">get mongodb.log</h1>
+
+<h1 id="get-tools:7037657cc708704df4e0a6506b8cb51b">get tools</h1>
+
+<h2 id="mtools:7037657cc708704df4e0a6506b8cb51b">mtools</h2>
+
+<p><a href="https://github.com/rueckstiess/mtools">https://github.com/rueckstiess/mtools</a></p>
+
+<p>Introducing mtools
+<a href="http://blog.mongodb.org/post/85123256973/introducing-mtools">http://blog.mongodb.org/post/85123256973/introducing-mtools</a></p>
+
+<p>install with sudo command</p>
+
+<h3 id="mloginfo:7037657cc708704df4e0a6506b8cb51b">mloginfo</h3>
+
+<p>see the statics of queries
+mloginfo mongodb.log &ndash;queries
+get result like below</p>
+
+<pre><code>namespace                                                     operation    pattern                                                                                                                                                             count     min (ms)    max (ms)    mean (ms)    95%-ile (ms)    sum (ms)
+
+optimis_reporting_production.raw_cases                        query        {&quot;clinic_id&quot;: 1, &quot;date_last_seen&quot;: 1, &quot;discharged&quot;: 1, &quot;one_time_evaluation&quot;: {&quot;$ne&quot;: 1}, &quot;resource_id&quot;: 1}                                                           2250         101       76940         2938        11023.45    6612314
+
+</code></pre>
+
+<h2 id="mlogfilter:7037657cc708704df4e0a6506b8cb51b">mlogfilter</h2>
+
+<p>filte the log by query time, specific operation or collection
+mlogfilter mongodb.log &ndash;slow 10000 &ndash;word optimis_reporting_production.raw_visits &ndash;operation query</p>
+
+<h1 id="add-index:7037657cc708704df4e0a6506b8cb51b">add index</h1>
+
+<ol>
+<li>check ram related things</li>
+</ol>
+
+<p>official guide seems suggest that all index size + working set &lt; RAM size.</p>
+
+<p>check index now
+db.system.indexes.find()</p>
+
+<p>change the data number showed from find
+<a href="http://stackoverflow.com/questions/3705517/how-to-print-out-more-than-20-items-documents-in-mongodbs-shell">http://stackoverflow.com/questions/3705517/how-to-print-out-more-than-20-items-documents-in-mongodbs-shell</a>
+DBQuery.shellBatchSize = 300</p>
+
+<p>see the size of each index
+<a href="http://jasonwilder.com/blog/2012/02/08/optimizing-mongodb-indexes/">http://jasonwilder.com/blog/2012/02/08/optimizing-mongodb-indexes/</a></p>
+
+<p>the operation of with indexed queries
+<a href="http://stackoverflow.com/questions/2811299/mongodb-index-ram-relationship">http://stackoverflow.com/questions/2811299/mongodb-index-ram-relationship</a>
+<a href="http://centaurea.io/blog?name=how-mongodb-indexes-depends-on-ram-and-io-operations">http://centaurea.io/blog?name=how-mongodb-indexes-depends-on-ram-and-io-operations</a></p>
+
+<p>When quering, mongodb load the index that query need into RAM. Not all indexed!!
+loaded index will remain in memory.
+Other query, needing other index, will be loaded to RAM.
+If the size needed for the new query index is bigger than the remained RAM, deleteing previous. If Still have insufficient RAM, partially loading index to RAM, which will cause loading I/O frequently and slowing down the system.
+loading index to RAM also need additional I/O and will slow down the system.</p>
+
+<p>the meaning of db.stats() dataSize, storageSize and fileSize.
+<a href="http://blog.mongolab.com/2014/01/how-big-is-your-mongodb/">http://blog.mongolab.com/2014/01/how-big-is-your-mongodb/</a></p>
+
+<p>extent can be data or indexes.
+extent(data) and extent(indexes) compose collection.
+one collection can have many parts.
+extent(data) contain many sets of document and padding stored, and space.
+mongodb ask disk a space for saving data, the space with data called document, the space without space called padding stored. The spec is allocated by mongodb, other application can not use that even the data there is deleting. So the dataSize will remain even deleting the data.</p>
+
+<p>The dataSize is the size of all document and padding set.</p>
+
+<p>document, padding stored, unused space constitute extent(data).
+storageSize is the sum of extent(data).</p>
+
+<p>fileSize is the sum of extent(data) + extent(index)</p>
+
+<p>maybe can use this
+<a href="https://github.com/jwilder/mongodb-tools">https://github.com/jwilder/mongodb-tools</a></p>
+
+<p><a href="http://blog.mongolab.com/2014/01/managing-disk-space-in-mongodb/">http://blog.mongolab.com/2014/01/managing-disk-space-in-mongodb/</a>
+compact</p>
+
+<p><a href="http://www.briancarpio.com/2012/05/03/mongodb-memory-management/">http://www.briancarpio.com/2012/05/03/mongodb-memory-management/</a>
+use free -tm to check memory used now
+low free RAM is not nessary a problem ?? mongodb will cached recent loaded file to cache as a memory mapped file.</p>
+
+<p>new relic do not show the right RAM information !!
+<a href="https://blog.jixee.me/understanding-new-relic-physical-memory-usage/">https://blog.jixee.me/understanding-new-relic-physical-memory-usage/</a>
+use free or top command</p>
+
+<p>how to add index
+yet
+<a href="https://emptysqua.re/blog/optimizing-mongodb-compound-indexes/#range">https://emptysqua.re/blog/optimizing-mongodb-compound-indexes/#range</a></p>
+
+<p>Great article!
+<a href="http://snmaynard.com/2012/10/17/things-i-wish-i-knew-about-mongodb-a-year-ago/">http://snmaynard.com/2012/10/17/things-i-wish-i-knew-about-mongodb-a-year-ago/</a></p>
+
+<pre><code>Index all the queries
+
+When I first started using Mongo, I would sometimes run queries on an ad-hoc basis or from a cron job. I initially left those queries unindexed, as they weren’t user facing and weren’t run often. However this caused performance problems for other indexed queries, as the unindexed queries do a lot of disk reads, which impacted the retrieval of any documents that weren’t cached. I decided to make sure the queries are at least partially indexed to prevent things like this happening.
+
+
+Always run explain on new queries
+</code></pre>
+
+<p>we have replication set</p>
+
+<p>Defragmentation</p>
+
+<p>upgrade mongodb</p>
+
+<p>use db.currentOp() to see the background job. Can use that for seeing the progress of creating index.</p>
+
+<h1 id="add-index-throgh-mongoid:7037657cc708704df4e0a6506b8cb51b">add index throgh mongoid</h1>
+
+<p>add code related to adding or deleting index
+run below code to remove incosistant code or add extra index</p>
+
+<pre><code>bundle exec rake db:mongoid:remove_undefined_indexes RAILS_ENV=production
+bundle exec rake db:mongoid:create_indexes RAILS_ENV=production
+</code></pre>
+
+<p>error may occured if already the index with different option already created. Need to add debug code to gem mongoid for debugging, for getting model name and database name and options.</p>
+
+<h2 id="lock:7037657cc708704df4e0a6506b8cb51b">lock</h2>
+
+<p>have write lock  when deleting index
+have global lock（read and write lock, all mongodb） when deleting db
+can add index under background, so have no lock</p>
+
+			</div>
+
+			
+		</div>
+
+  </body>
+</html>

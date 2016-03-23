@@ -1,0 +1,175 @@
+	<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.14" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title> include_and_extend_for_ruby &middot; Wanderer </title>
+
+  
+  <link rel="stylesheet" href="http://crokobit.github.io/css/poole.css">
+  <link rel="stylesheet" href="http://crokobit.github.io/css/syntax.css">
+  <link rel="stylesheet" href="http://crokobit.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="Wanderer" />
+</head>
+
+	<body class="">
+		<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://crokobit.github.io/"><h1>Wanderer</h1></a>
+      <p class="lead">
+      An elegant open source and mobile first theme for <a href="http://hugo.spf13.com">hugo</a> made by <a href="http://twitter.com/mdo">@mdo</a>. Originally made for Jekyll.
+      </p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li><a href="/">Home</a> </li>
+      
+    </ul>
+
+    <p>&copy; 2016. All rights reserved. </p>
+  </div>
+</div>
+
+
+		<div class="content container">
+			<div class="post">
+			 	<h1>include_and_extend_for_ruby</h1>
+			  <span class="post-date">Mon, Dec 28, 2015</span>
+			      
+
+<h1 id="include:e33a9e6635544a1a1034936fc0d63481">include</h1>
+
+<ul>
+<li>include module methods as instance methods</li>
+</ul>
+
+<h1 id="extend:e33a9e6635544a1a1034936fc0d63481">extend</h1>
+
+<ul>
+<li>extend module instance methods as class methods</li>
+</ul>
+
+<h1 id="actions-when-included-or-extended:e33a9e6635544a1a1034936fc0d63481">actions when included or extended</h1>
+
+<ul>
+<li>class method &lsquo;self.included&rsquo; is the action when include the module</li>
+<li>class method &lsquo;self.extended&rsquo; is the action when extend the module</li>
+<li>base is the host class including / extending the module</li>
+<li>use <code>base.include</code>, <code>base.extend</code> to do some action to the host class</li>
+</ul>
+
+<pre><code class="language-ruby">self.included(base)
+end
+</code></pre>
+
+<h1 id="activesupport-concern:e33a9e6635544a1a1034936fc0d63481">ActiveSupport::Concern</h1>
+
+<ul>
+<li>solves the module dependency problem</li>
+</ul>
+
+<p>If  module B need need A, class C needs to include both module A and B. ActiveSupport::Concern solve this.</p>
+
+<pre><code class="language-ruby">  module A
+    def self.included(base)
+      base.send(:include, XXX)
+    end
+  end
+
+  module B
+    # depends on A
+  end
+
+  class C
+    include A
+    include B 
+  end
+</code></pre>
+
+<pre><code class="language-ruby">  module A
+    # base become B, wrong!
+    def self.included(base)
+      base.send(:include, XXX)
+    end
+  end
+
+  module B
+    include A
+  end
+
+  class C
+    include A
+    include B 
+  end
+</code></pre>
+
+<pre><code class="language-ruby">  module A
+    def self.included(base)
+      base.send(:include, XXX)
+    end
+  end
+
+  module B
+    extend ActiveSupport::Concern
+    included do
+      self.send(:do_sth)
+    end
+  end
+
+  class C
+    include B 
+  end
+</code></pre>
+
+<ul>
+<li>auto include</li>
+</ul>
+
+<pre><code class="language-ruby">  module Set
+    extend ActiveSupport::Concern
+    module ClassMethods
+      def a
+        puts 'a'
+      end
+    end
+    module InstanceMethods
+      def b
+        puts 'b'
+      end
+    end
+  end
+
+  class Host
+    include Set
+  end
+
+  Host.a =&gt; a
+  Host.new.b =&gt; b
+
+</code></pre>
+
+<p>r.f.</p>
+
+<p><a href="https://ihower.tw/blog/archives/3949">https://ihower.tw/blog/archives/3949</a>
+<a href="http://github.com/rails/rails/blob/master/activesupport/lib/active_support/concern.rb">http://github.com/rails/rails/blob/master/activesupport/lib/active_support/concern.rb</a></p>
+
+			</div>
+
+			
+		</div>
+
+  </body>
+</html>

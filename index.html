@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.14" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title> Wanderer &middot; Wanderer </title>
+
+  
+  <link rel="stylesheet" href="http://crokobit.github.io/css/poole.css">
+  <link rel="stylesheet" href="http://crokobit.github.io/css/syntax.css">
+  <link rel="stylesheet" href="http://crokobit.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="http://crokobit.github.io/index.xml" rel="alternate" type="application/rss+xml" title="Wanderer" />
+</head>
+
+<body class="">
+
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://crokobit.github.io/"><h1>Wanderer</h1></a>
+      <p class="lead">
+      An elegant open source and mobile first theme for <a href="http://hugo.spf13.com">hugo</a> made by <a href="http://twitter.com/mdo">@mdo</a>. Originally made for Jekyll.
+      </p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li><a href="/">Home</a> </li>
+      
+    </ul>
+
+    <p>&copy; 2016. All rights reserved. </p>
+  </div>
+</div>
+
+
+    <div class="content container">
+<div class="posts">
+
+      
+  <div class="post">
+    <h1 class="post-title">
+      <a href="http://crokobit.github.io/chef_node_attribute_dependency_between_cookbook/">
+        chef_node_attribute_dependency_between_cookbook
+      </a>
+    </h1>
+
+    <span class="post-date">Mon, Mar 21, 2016</span>
+
+    
+
+<h1 id="chef-node-attribute-dependency-between-cookbook-derived-attribute:988af73b670e742c75a24cba40023286">Chef Node Attribute Dependency Between Cookbook (Derived Attribute)</h1>
+
+<ul>
+<li>chef have two stages when running <code>chef-client</code>
+1 Complie Time / Phase
+2 Run Time (Converage Phase)</li>
+<li>(<a href="http://stackoverflow.com/questions/25980820/please-explain-compile-time-vs-run-time-in-chef-recipes">http://stackoverflow.com/questions/25980820/please-explain-compile-time-vs-run-time-in-chef-recipes</a>)</li>
+</ul>
+
+<h1 id="when-using-node-attribute-in-compile-time-the-attribute-will-not-be-the-one-effected-after-running-chef-client:988af73b670e742c75a24cba40023286">When using node attribute in compile time, the attribute will not be the one effected after running <code>chef-client</code></h1>
+
+<h1 id="solution:988af73b670e742c75a24cba40023286">Solution</h1>
+
+<ul>
+<li><a href="https://coderanger.net/derived-attributes/">Delayed Interpolation</a></li>
+<li>(<a href="https://christinemdraper.wordpress.com/2014/10/06/avoiding-the-possible-pitfalls-of-derived-attributes/">https://christinemdraper.wordpress.com/2014/10/06/avoiding-the-possible-pitfalls-of-derived-attributes/</a>)
+
+<ul>
+<li>for cookbook user
+
+<ul>
+<li>delay assignement %{} ???</li>
+<li>condition assiginement</li>
+</ul></li>
+</ul></li>
+<li><a href="http://stackoverflow.com/questions/15816208/chef-recipes-setting-node-attributes-in-ruby-block">Ruby Block</a>
+
+<ul>
+<li>Because the value are all calculate in compile time, changing the defalut value in other cookbook will not effect the action use the default value in other cookbooks. <a href="https://gist.github.com/arangamani/4659646">example</a></li>
+<li>fetch your attribute from file or data bag at run time.</li>
+</ul></li>
+<li>Role attribute priority is greater than cookbook. Can set attrinutes we want in role.
+-<a href="https://docs.chef.io/resource_common.html#lazy-attribute-evaluation">Lazy Evaluation</a>
+
+<ul>
+<li><code>lazy { ruby_code }</code></li>
+</ul></li>
+</ul>
+
+<h1 id="q:988af73b670e742c75a24cba40023286">Q</h1>
+
+<ul>
+<li>default = node ? -&gt;YES</li>
+<li><a href="https://docs.chef.io/attributes.html">https://docs.chef.io/attributes.html</a></li>
+</ul>
+
+<pre><code class="language-ruby">    An attribute file is located in the attributes/ sub-directory for a cookbook. When a cookbook is run against a node, the attributes contained in all attribute files are evaluated in the context of the node object. Node methods (when present) are used to set attribute values on a node. For example, the apache2 cookbook contains an attribute file called default.rb, which contains the following attributes:
+    default['apache']['dir']          = '/etc/apache2'
+    default['apache']['listen_ports'] = [ '80','443' ]
+    The use of the node object (node) is implicit in the previous example; the following example defines the node object itself as part of the attribute:
+    node.default['apache']['dir']          = '/etc/apache2'
+    node.default['apache']['listen_ports'] = [ '80','443' ]
+</code></pre>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="http://crokobit.github.io/rabbitmq/">
+        rabbitmq
+      </a>
+    </h1>
+
+    <span class="post-date">Tue, Mar 8, 2016</span>
+
+    
+
+<p>#bindings
+<a href="http://rubybunny.info/articles/bindings.html">http://rubybunny.info/articles/bindings.html</a></p>
+
+<p>If an AMQP message cannot be routed to any queue (for example, because there are no bindings for the exchange it was published to), it is either dropped or returned to the publisher, depending on the message attributes that the publisher has set.</p>
+
+<p>If an application wants to connect a queue to an exchange, it needs to bind them. The opposite operation is called unbinding.</p>
+
+<h2 id="binding-to-a-exchanger:5c2b20c06247f647e7eecd23d3270934">binding to a exchanger</h2>
+
+<ul>
+<li>queue.bind(exchange)</li>
+<li>queue.bind(&ldquo;action.update&rdquo;) # exchanger defined explcitly</li>
+<li></li>
+</ul>
+
+<h1 id="http-stackoverflow-com-questions-18418936-rabbitmq-and-relationship-between-channel-and-connection:5c2b20c06247f647e7eecd23d3270934"><a href="http://stackoverflow.com/questions/18418936/rabbitmq-and-relationship-between-channel-and-connection">http://stackoverflow.com/questions/18418936/rabbitmq-and-relationship-between-channel-and-connection</a></h1>
+
+<h1 id="http-stackoverflow-com-questions-35509784-difference-between-broker-and-exchange:5c2b20c06247f647e7eecd23d3270934"><a href="http://stackoverflow.com/questions/35509784/difference-between-broker-and-exchange">http://stackoverflow.com/questions/35509784/difference-between-broker-and-exchange</a></h1>
+
+<p>channel is a virtual connection inside a real connection.
+borker is referring to a message system such as rabbitmq.</p>
+
+<p>What is dispatch</p>
+
+<h1 id="https-www-rabbitmq-com-tutorials-tutorial-two-ruby-html:5c2b20c06247f647e7eecd23d3270934"><a href="https://www.rabbitmq.com/tutorials/tutorial-two-ruby.html">https://www.rabbitmq.com/tutorials/tutorial-two-ruby.html</a></h1>
+
+<p>See &lsquo;Fair Dispatch&rsquo;</p>
+
+<p>Originally, rabbitmq does not check whether consumer ack the message or not. Some times the time of dealing with message is differ form consumers. Using &lsquo;prefetch&rsquo; let rabbitmq sending message only when consumer acked the message.</p>
+
+<p><a href="http://rubybunny.info/articles/queues.html">http://rubybunny.info/articles/queues.html</a>
+<a href="https://www.rabbitmq.com/tutorials/amqp-concepts.html">https://www.rabbitmq.com/tutorials/amqp-concepts.html</a>
+<a href="https://www.rabbitmq.com/consumer-prefetch.html">https://www.rabbitmq.com/consumer-prefetch.html</a>
+<a href="http://rubybunny.info/articles/exchanges.html">http://rubybunny.info/articles/exchanges.html</a>
+<a href="https://www.rabbitmq.com/tutorials/tutorial-one-ruby.html">https://www.rabbitmq.com/tutorials/tutorial-one-ruby.html</a></p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="http://crokobit.github.io/pow/">
+        pow
+      </a>
+    </h1>
+
+    <span class="post-date">Mon, Feb 1, 2016</span>
+
+    <p>We redirecting to a service with no port.
+Using pow to solve this</p>
+
+<p><a href="http://pow.cx/">http://pow.cx/</a></p>
+
+<p><a href="http://pow.cx/manual.html">http://pow.cx/manual.html</a></p>
+
+<p>install</p>
+
+<pre><code>  curl get.pow.cx | sh
+</code></pre>
+
+<p>link project</p>
+
+<pre><code>  cd ~/.pow
+  ln -s /path/to/myapp
+</code></pre>
+
+<p>write script for setting ruby env</p>
+
+<p>cd project/.powrc</p>
+
+<pre><code>  if [ -f &quot;$rvm_path/scripts/rvm&quot; ]; then
+    source &quot;$rvm_path/scripts/rvm&quot;
+    rvm 2.1.5
+  fi
+</code></pre>
+
+<p>restart app</p>
+
+<pre><code>touch tmp/restart.txt
+</code></pre>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="http://crokobit.github.io/build_rails/">
+        build_rails
+      </a>
+    </h1>
+
+    <span class="post-date">Sun, Jan 10, 2016</span>
+
+    
+
+<p>ch1</p>
+
+<p>gem build rulers</p>
+
+<p>cd rulers</p>
+
+<p>vi rulers.gemspec</p>
+
+<pre><code class="language-ruby">     spec.add_runtime_dependency &quot;rack&quot;
+</code></pre>
+
+<p>gem build rulers.gemspec (is raise error &lsquo;contain itself &hellip;&rsquo; change version at &lsquo;lib/rulers/version.rb&rsquo;)</p>
+
+<p>gem install rulers (install generated rulers-0.1.0.gem)</p>
+
+<p>Then we can use the gem</p>
+
+<p>create a dir for using rulers gem</p>
+
+<p>mkdir best_quotes</p>
+
+<p>vi Gemfile</p>
+
+<pre><code>    source 'https://rubygems.org'
+    gem 'rulers'
+</code></pre>
+
+<p>bundle</p>
+
+<p>bundle will use Gemfile as reference for install gems</p>
+
+<p>vi config.ru # this is a file for rack xxx?</p>
+
+<pre><code>    run proc {
+        [
+              200, # status conde
+              {''Content-Type' =&gt; 'text/html'}, #header
+              ['HELLO WORLD !'] #content
+         ]
+     }
+</code></pre>
+
+<p>##header
+“The important one for us right now is ‘Content-Type’, which must be ‘text/html’.  That just lets the browser know that we want the page rendered as HTML rather than text, JSON, XML, RSS or something else.”</p>
+
+<h1 id="then-upgrade-rullers:b3e38af64de845d4d23661d59b1ccc3d">Then upgrade rullers</h1>
+
+<p>“Making Rulers Use Rack”</p>
+
+<p>rackup -p 3001</p>
+
+<p>this command will search config.ru</p>
+
+<p>cd rulers</p>
+
+<p>vi lib/rulers.rb</p>
+
+<pre><code class="language-ruby">require &quot;rulers/version&quot;
+
+module Rulers
+    class Application
+        def call(env)
+            [
+                200,
+                {'Content-Type' =&gt; 'text/html'},
+                ['HELLO,WORLD!']
+            ]
+        end
+    end
+end
+</code></pre>
+
+<p>upgrade version to avoid &lsquo;contain itself error&rsquo;</p>
+
+<p>vi lib/rulers/version.rb</p>
+
+<pre><code>module Rulers
+     VERSION = &quot;0.1.1&quot;
+end
+</code></pre>
+
+<p>gem build rulers.gemspec
+gem install rulers</p>
+
+<p>cd best_quotes</p>
+
+<p>bundle</p>
+
+<p>vi config/application.rb</p>
+
+<pre><code class="language-ruby">require 'rulers'
+module BestQuotes
+    class Application &lt; Rulers::Application
+
+    end
+end
+</code></pre>
+
+<p>vi config.ru</p>
+
+<pre><code>require './config/application' # imp!
+run BestQuotes::Application.new # I do not know why this code work after moving some code to
+#call(env) ... 
+#WHY? see rack website
+</code></pre>
+
+<p>##rack
+<a href="http://rack.github.io/">http://rack.github.io/</a></p>
+
+<p>Rack provides a minimal interface between webservers that support Ruby and Ruby frameworks.</p>
+
+<p>To use Rack, provide an &ldquo;app&rdquo;: an object that responds to the call method, taking the environment hash as a parameter, and returning an Array with three elements:</p>
+
+<p>The HTTP response code
+A Hash of headers
+The response body, which must respond to each</p>
+
+<pre><code># my_rack_app.rb
+ 
+require 'rack'
+ 
+app = Proc.new do |env|
+    ['200', {'Content-Type' =&gt; 'text/html'}, ['A barebones rack app.']]
+end
+ 
+Rack::Handler::WEBrick.run app
+
+</code></pre>
+
+<p>Or</p>
+
+<p>Or, you can use the rackup command line tool and avoid specifying details like port and server until runtime:</p>
+
+<pre><code>
+# config.ru
+ run Proc.new { |env| ['200', {'Content-Type' =&gt; 'text/html'}, ['get rack\'d']] }
+</code></pre>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="http://crokobit.github.io/git/">
+        git
+      </a>
+    </h1>
+
+    <span class="post-date">Sun, Jan 10, 2016</span>
+
+    <p>git merge —abort</p>
+
+<p>git cherry-pick &ndash;abort</p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="http://crokobit.github.io/PL/">
+        PL
+      </a>
+    </h1>
+
+    <span class="post-date">Sun, Jan 10, 2016</span>
+
+    <p>PL</p>
+
+<p>variable binding
+only can use previous binding</p>
+
+<p>in dynamic envirement, fetch variable by previoud satabinding</p>
+
+<p>before dynamic-&gt; static env</p>
+
+<p>expression</p>
+
+<p>z &lt; 0 (expression)</p>
+
+<p>type checking</p>
+
+<p>syntax: how you write sth down</p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="http://crokobit.github.io/ruby/lambda_and_proc/">
+        lambda_and_proc
+      </a>
+    </h1>
+
+    <span class="post-date">Fri, Jan 1, 2016</span>
+
+    
+
+<p>Differences between Procs and Lambdas</p>
+
+<ul>
+<li>received parameter behavior with wrong number parameter
+
+<ul>
+<li>Proc -&gt; no error</li>
+<li>lambda -&gt; error</li>
+</ul></li>
+<li>return behavior
+
+<ul>
+<li>Proc -&gt; return to outside where Proc be called</li>
+<li>lambda -&gt; return to where lambda be called</li>
+</ul></li>
+</ul>
+
+<p>Proc.new == lambda, can parameterize</p>
+
+<p>{} == do &hellip; end, only can be used by putting after the function.
+Still generating a Proc object when doing this.</p>
+
+<p>&amp;block for passing Block(Proc) into function</p>
+
+<p>yield = block.call</p>
+
+<p>proc is object.
+block( do..end, {}, &amp;block) isn&rsquo;t.
+So block can not be assigned to variable.</p>
+
+<p>can only pass one block to function(syntax constraint),
+but can have multiple proc parameter.</p>
+
+<p>can pass parameter to yield or &amp;block.call.</p>
+
+<p>&ldquo;code block has the scope where it is defined, it can use the variable can be found when defining itself&rdquo;
+From Eloquent Ruby</p>
+
+<p>can use varaible excute the block and catch the return value for excute arround purpose.</p>
+
+<p>The whole idea of execute around is that the caller is guaranteed that this will happen before the code block fires and that will happen after.
+From Eloquent Ruby</p>
+
+<p>execute around make your code a bit easier to read.
+e.g. say_with_block{ &ldquo;something&rdquo; }</p>
+
+<p>block can be applied when needing to lazy initializing.</p>
+
+<h2 id="elogent-ruby-ch19:8f371f8b4a6b21aa2f27bb36b0a89aaa">Elogent ruby ch19</h2>
+
+<p>split a function of different responsibility to anoteher class.</p>
+
+<p>can use block to pass the function into a class.</p>
+
+<p>can define constant lambda of that function.</p>
+
+<p>block holds all local variable of its outside scope.
+this will lenthen the life cycle of those object.
+clean the object - especially really big object, e.g. a super big array - the block no use.</p>
+
+<p>r.f.
+<a href="http://awaxman11.github.io/blog/2013/08/05/what-is-the-difference-between-a-block/">http://awaxman11.github.io/blog/2013/08/05/what-is-the-difference-between-a-block/</a>
+<a href="http://railsfun.tw/t/method-block-yield-proc-lambda/110">http://railsfun.tw/t/method-block-yield-proc-lambda/110</a></p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="http://crokobit.github.io/ruby/private_and_protected/">
+        private_and_protected
+      </a>
+    </h1>
+
+    <span class="post-date">Wed, Dec 30, 2015</span>
+
+    <p>private and protected
+- private method must have no receiver
+- protected method can have receiver; however, must be called inside same type of class.</p>
+
+<p>protected function can be used by same class object or child object</p>
+
+<p>r.f.
+<a href="http://culttt.com/2015/06/03/the-difference-between-public-protected-and-private-methods-in-ruby/">http://culttt.com/2015/06/03/the-difference-between-public-protected-and-private-methods-in-ruby/</a></p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="http://crokobit.github.io/include_and_extend_for_ruby/">
+        include_and_extend_for_ruby
+      </a>
+    </h1>
+
+    <span class="post-date">Mon, Dec 28, 2015</span>
+
+    
+
+<h1 id="include:e33a9e6635544a1a1034936fc0d63481">include</h1>
+
+<ul>
+<li>include module methods as instance methods</li>
+</ul>
+
+<h1 id="extend:e33a9e6635544a1a1034936fc0d63481">extend</h1>
+
+<ul>
+<li>extend module instance methods as class methods</li>
+</ul>
+
+<h1 id="actions-when-included-or-extended:e33a9e6635544a1a1034936fc0d63481">actions when included or extended</h1>
+
+<ul>
+<li>class method &lsquo;self.included&rsquo; is the action when include the module</li>
+<li>class method &lsquo;self.extended&rsquo; is the action when extend the module</li>
+<li>base is the host class including / extending the module</li>
+<li>use <code>base.include</code>, <code>base.extend</code> to do some action to the host class</li>
+</ul>
+
+<pre><code class="language-ruby">self.included(base)
+end
+</code></pre>
+
+<h1 id="activesupport-concern:e33a9e6635544a1a1034936fc0d63481">ActiveSupport::Concern</h1>
+
+<ul>
+<li>solves the module dependency problem</li>
+</ul>
+
+<p>If  module B need need A, class C needs to include both module A and B. ActiveSupport::Concern solve this.</p>
+
+<pre><code class="language-ruby">  module A
+    def self.included(base)
+      base.send(:include, XXX)
+    end
+  end
+
+  module B
+    # depends on A
+  end
+
+  class C
+    include A
+    include B 
+  end
+</code></pre>
+
+<pre><code class="language-ruby">  module A
+    # base become B, wrong!
+    def self.included(base)
+      base.send(:include, XXX)
+    end
+  end
+
+  module B
+    include A
+  end
+
+  class C
+    include A
+    include B 
+  end
+</code></pre>
+
+<pre><code class="language-ruby">  module A
+    def self.included(base)
+      base.send(:include, XXX)
+    end
+  end
+
+  module B
+    extend ActiveSupport::Concern
+    included do
+      self.send(:do_sth)
+    end
+  end
+
+  class C
+    include B 
+  end
+</code></pre>
+
+<ul>
+<li>auto include</li>
+</ul>
+
+<pre><code class="language-ruby">  module Set
+    extend ActiveSupport::Concern
+    module ClassMethods
+      def a
+        puts 'a'
+      end
+    end
+    module InstanceMethods
+      def b
+        puts 'b'
+      end
+    end
+  end
+
+  class Host
+    include Set
+  end
+
+  Host.a =&gt; a
+  Host.new.b =&gt; b
+
+</code></pre>
+
+<p>r.f.</p>
+
+<p><a href="https://ihower.tw/blog/archives/3949">https://ihower.tw/blog/archives/3949</a>
+<a href="http://github.com/rails/rails/blob/master/activesupport/lib/active_support/concern.rb">http://github.com/rails/rails/blob/master/activesupport/lib/active_support/concern.rb</a></p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="http://crokobit.github.io/neovim/">
+        neovim
+      </a>
+    </h1>
+
+    <span class="post-date">Sat, Dec 26, 2015</span>
+
+    
+
+<h1 id="copy-to-osx-clipboard:ee0284a4b03dbcbef85c4887fa00f216">copy to OSX clipboard</h1>
+
+<ul>
+<li>select the thing you want to copy
+use regisiter *</li>
+<li>&ldquo;*y</li>
+</ul>
+
+<h1 id="instant-review-the-result:ee0284a4b03dbcbef85c4887fa00f216">instant review the result</h1>
+
+<ul>
+<li>hugo server &ndash;theme=hyde &ndash;buildDrafts</li>
+</ul>
+
+<p>it will refresh when changing</p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="http://crokobit.github.io/callback/">
+        callback
+      </a>
+    </h1>
+
+    <span class="post-date">Mon, Dec 21, 2015</span>
+
+    <p>The Problem with Rails Callbacks</p>
+
+<p><a href="http://samuelmullen.com/2013/05/the-problem-with-rails-callbacks/">http://samuelmullen.com/2013/05/the-problem-with-rails-callbacks/</a></p>
+
+<p>Putting callbacks, expecially putting other responsibility in after_callbcack, result that harder testing problem and wrong spliting of responsibility. Using a PORO or service object to extract the responsibility.</p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="http://crokobit.github.io/chef/">
+        chef
+      </a>
+    </h1>
+
+    <span class="post-date">Thu, Dec 17, 2015</span>
+
+    
+
+<h1 id="chef-note:33201a3ee4c6d66b2206397a340d1a9e">CHEF NOTE</h1>
+
+<h2 id="note-of-following-guides:33201a3ee4c6d66b2206397a340d1a9e">NOTE OF FOLLOWING GUIDES</h2>
+
+<pre><code>  Learn the Chef basics
+  Learn to manage a node
+  Learn to manage a basic web application
+  Learn to develop your infrastructure code locally
+</code></pre>
+
+<p><a href="https://learn.chef.io/tutorials/">Guide Link</a></p>
+
+<h2 id="generating-chef-repo:33201a3ee4c6d66b2206397a340d1a9e">Generating chef repo</h2>
+
+<ul>
+<li><p>Usually this is done by download starter kit form chef server. The setting will be included automatically.</p></li>
+
+<li><p><code>chef generate repo ~/chef-repo</code> A chef resource describe the state of specific file, template or package.</p></li>
+</ul>
+
+<h2 id="recipe:33201a3ee4c6d66b2206397a340d1a9e">Recipe</h2>
+
+<ul>
+<li>A receipe is a file contains related resources, configure of web server, database server, or load balancer.</li>
+</ul>
+
+<h2 id="run-on-server:33201a3ee4c6d66b2206397a340d1a9e">Run on server</h2>
+
+<ul>
+<li><code>chef-client</code> fetch recipes and start running chef on server.</li>
+<li><code>sudo chef-client --local-mode --runlist 'recipe[learn_chef_apache2]'</code></li>
+<li>runlist, deciding order and which recipe need to be run.</li>
+<li>debug <code>sudo chef-client -l debug</code></li>
+</ul>
+
+<h2 id="chef-server-opscode-server:33201a3ee4c6d66b2206397a340d1a9e">Chef server (Opscode server)</h2>
+
+<ul>
+<li>A chef server is a repository that save cookbooks and node informations.</li>
+</ul>
+
+<h2 id="cookbook:33201a3ee4c6d66b2206397a340d1a9e">Cookbook</h2>
+
+<ul>
+<li><code>knife cookbook upload learn_chef_apache2</code></li>
+<li>can download cookbooks from supermarket, a opensource cookbook community. <a href="https://supermarket.chef.io/cookbooks">link</a></li>
+<li><code>knife cookbook site download learn_chef_apache2</code>, download from supermarket</li>
+<li><code>chef generate cookbook cookbooks/awesome_customers</code> Generating cookbook.</li>
+<li><code>knife cookbook site show xxx | grep latest_version</code> Showing xxx versions in chef supermarcket</li>
+<li>pining, specificying the version of cookbook in metadata.rb .
+chef will update the cookbook form chef supermarcket by the version.
+
+<ul>
+<li>~&gt; x.y.z means greate than x.y but smaller than x.y+1 . z changes means bug fixes or patches.
+Generating recipe</li>
+</ul></li>
+<li>chef generate recipe cookbooks/awesome_customers user</li>
+<li>include recipe in cookbook/recipes/default.rb <code>include_recipe 'cookbookxxx::yyy'</code> means it will run that recipe when running r</li>
+</ul>
+
+<h3 id="delete-cookbook-from-chef-server:33201a3ee4c6d66b2206397a340d1a9e">delete cookbook from Chef server</h3>
+
+<ul>
+<li>knife cookbook delete <cookbook-name>
+remove berkshelf cookbook locally</li>
+<li>rm -r ~/.berkshelf/cookbooks
+delete repo</li>
+<li>rm -r ~/chef-repo
+Delete the node from the Chef server</li>
+<li>knife node delete web_app_ubuntu &ndash;yes</li>
+</ul>
+
+<p>.erb means it can hold placeholders, filled in when recipe runs.
+  <a href="https://supermarket.chef.io/cookbooks">https://supermarket.chef.io/cookbooks</a>.
+_</p>
+
+<h2 id="node:33201a3ee4c6d66b2206397a340d1a9e">Node</h2>
+
+<ul>
+<li>Node object is a object that contains its information, saved in chef server. The object will be loaded to node&rsquo;s memory when knife xxx. ? (link)[<a href="https://docs.chef.io/attributes.html#automatic-ohai">https://docs.chef.io/attributes.html#automatic-ohai</a>]</li>
+<li>A node is a computer, VM, container, or a phycial server managed by a chef.</li>
+<li>Bootstraping the node is the process installing chef-client on a node.</li>
+<li><code>knife boorstrasp</code> is a one time process, association the node to chef server and apply cookbook.</li>
+<li><code>knife bootstrap</code> will download the chef-client to and cookbook to node and apply the cookbook.</li>
+<li>set node.chef_environment by <code>knife bootstrap .... -E staging</code></li>
+</ul>
+
+<p>later, if just needing to apply cookbook change, use knife ssh.</p>
+
+<h2 id="provisioning-example:33201a3ee4c6d66b2206397a340d1a9e">Provisioning example</h2>
+
+<ul>
+<li><code>knife cookbook upload</code></li>
+<li><code>knife bootstrap ADDRESS --ssh-user USER --ssh-password 'PASSWORD' --sudo --use-sudo-password --node-name node1 --run-list 'recipe[learn_chef_apache2]'</code>
+
+<ul>
+<li>&ndash;node-name is the unique identifier for chef server</li>
+<li>ADDRESS needs public IP.</li>
+</ul></li>
+<li><code>knife node list</code></li>
+<li><code>knife node show</code>
+knife ssh is for applying changed cookbook to a node after the node is bootstraped.</li>
+<li><code>knife ssh ADDRESS 'sudo chef-client' --manual-list --ssh-user USER --ssh-password 'PASSWORD'</code>
+knife with ssh key</li>
+<li><code>knife bootstrap ADDRESS --ssh-user USER --sudo --identity-file IDENTITY_FILE --node-name web_app_ubuntu --run-list 'recipe[awesome_customers]'</code>
+
+<ul>
+<li>IDENTITY_FILE is the ssh key location.</li>
+</ul></li>
+</ul>
+
+<h2 id="attribute:33201a3ee4c6d66b2206397a340d1a9e">Attribute</h2>
+
+<ul>
+<li><code>chef generate attribute cookbooks/awesome_customers default</code> Defining customized node attributes</li>
+<li>DRY the reusable content to attribute/ , use node[&lsquo;xxx&rsquo;] to access.</li>
+</ul>
+
+<h2 id="cookbook-versioning:33201a3ee4c6d66b2206397a340d1a9e">Cookbook Versioning</h2>
+
+<h3 id="berkshelf:33201a3ee4c6d66b2206397a340d1a9e">Berkshelf</h3>
+
+<ul>
+<li>in xxx bookbook, <code>berks install</code> will fetch dependency cookbooks to local env. Saving under ./berkshelf/cookbooks/
+under xxx cookbook folder. cookbook/xxx/</li>
+<li>then, use <code>berk upload</code> to upload cookbooks, dependency cookbooks included,</li>
+<li><code>knife cookbook list</code> Check is success or not</li>
+</ul>
+
+<h3 id="chef-librian:33201a3ee4c6d66b2206397a340d1a9e">Chef Librian</h3>
+
+<ul>
+<li><code>librian-chef install</code></li>
+</ul>
+
+<h3 id="down-all-data-from-chef-server:33201a3ee4c6d66b2206397a340d1a9e">down all data from chef server</h3>
+
+<ul>
+<li><code>knife download /</code></li>
+</ul>
+
+<h1 id="data-bag:33201a3ee4c6d66b2206397a340d1a9e">Data Bag</h1>
+
+<ul>
+<li>values shared among nodes.</li>
+
+<li><p>can be encrypted optionally.</p>
+
+<h2 id="encrypted:33201a3ee4c6d66b2206397a340d1a9e">encrypted</h2></li>
+
+<li><p>generate a key to encrypt databag item</p></li>
+</ul>
+
+<p><code>openssl rand -base64 512 | tr -d '\r\n' &gt; /tmp/encrypted_data_bag_secret</code></p>
+
+<ul>
+<li>uploading to node use scp command.</li>
+</ul>
+
+<p><code>scp -i ~/.ssh/my.pem /tmp/encrypted_data_bag_secret ubuntu@52.10.205.36:/etc/chef</code></p>
+
+<ul>
+<li>creating data bag at chef server. (will do nothing at local)</li>
+</ul>
+
+<p><code>knife data bag create passwords</code></p>
+
+<ul>
+<li><p>create local data.</p>
+
+<ul>
+<li>p.s. Not in cookbook! but in chef-repo, chef-repo/data_bags/passwords/, data bags are used by everybody cookbooks</li>
+</ul>
+
+<p><code>mkdir databags/passwords</code></p></li>
+
+<li><p>create data json file in databags/passwords</p></li>
+
+<li><p>update the password to Chef server with encryption, local file remain unencrypted
+<code>knife data bag from file passwords sql_server_root_password.json --secret-file /tmp/encrypted_data_bag_secret</code>
+verfy</p></li>
+</ul>
+
+<p><code>knife data bag show passwords sql_server_root_password</code></p>
+
+<ul>
+<li>can verify with encrypt key file
+<code>knife data bag show passwords sql_server_root_password --secret-file /tmp/encrypted_data_bag_secret</code></li>
+<li>encrypt the json file locally
+<code>knife data bag from file passwords sql_server_root_password.json --secret-file /tmp/encrypted_data_bag_secret --local-mode</code></li>
+</ul>
+
+<h2 id="template:33201a3ee4c6d66b2206397a340d1a9e">Template</h2>
+
+<ul>
+<li>A template is a single, general, customized recipe for specific node as recipe runs.</li>
+</ul>
+
+<h2 id="knife-ssh:33201a3ee4c6d66b2206397a340d1a9e">knife ssh</h2>
+
+<ul>
+<li><code>Knife ssh</code> will invokes the command pecified over an SSH connection on a node - here is chef-client.</li>
+<li>No need to specify the run list, cookbook, because it is set up by bootstraping.</li>
+<li>&lsquo;sudo chef-client&rsquo; is nessary for reapply cookbook. Without that, knife ssh just update cookbook, not apply it.</li>
+</ul>
+
+<h1 id="test-it-locally:33201a3ee4c6d66b2206397a340d1a9e">Test it locally</h1>
+
+<h2 id="test-kitchen:33201a3ee4c6d66b2206397a340d1a9e">Test Kitchen</h2>
+
+<ul>
+<li>Test Kitchen enables you to test cookboos in a temporary environment.</li>
+<li>install vagrant and virtual-box (<a href="http://sourabhbajaj.com/mac-setup/Vagrant/README.html">http://sourabhbajaj.com/mac-setup/Vagrant/README.html</a>)</li>
+<li><code>.kitchen.ymla will be created automacally when creating cookbook using</code>chef generate cookbook motd`</li>
+
+<li><p>modify .kitchen.yml in cookbook.</p>
+
+<ul>
+<li>driver specifies the software that manages the machine. We&rsquo;re using Vagrant.</li>
+<li>provisioner specifies how to run Chef.</li>
+<li>platforms specifies the target operating systems.</li>
+<li>suites specifies what - e.g. cookbook - we want to apply to the virtual environment.</li>
+</ul></li>
+
+<li><p><code>kitchen list</code> list virtual environments create virtual enviroments</p></li>
+
+<li><p><code>kitchen create</code> apply cookbook</p></li>
+
+<li><p><code>kitchen converge, slower at first time because it need to install chef-client, will create instance if not created yet</code>
+login to instance</p></li>
+
+<li><p><code>kitchen login</code> logout in instance after login</p></li>
+
+<li><p><code>logout</code> delete instance</p></li>
+
+<li><p><code>kitchen destroy</code></p></li>
+</ul>
+
+<h1 id="assign-ip-cookbook-and-data-bag-in-kitchen-yml:33201a3ee4c6d66b2206397a340d1a9e">assign ip, cookbook and data bag in .kitchen.yml</h1>
+
+<pre><code class="language-yml">driver:
+  network:
+  - [&quot;private_network&quot;, {ip: &quot;x.x.x.x&quot;}]
+suits:
+  - name: default
+    data_bags_path: &quot;../../data_bags&quot;
+    run_list:
+      - recipe[awesome_customers::default]
+    attributes:
+      awesome_customers:
+        passwords:
+          secret_path: 'tmp/kitchen/encrypted_data_bag_secret'
+</code></pre>
+
+<h2 id="chef-client-dry-run-why-run:33201a3ee4c6d66b2206397a340d1a9e">chef-client dry run (why-run)</h2>
+
+<p>chef-client &ndash;why-run
+chef-client -W</p>
+
+<h2 id="chef-environment:33201a3ee4c6d66b2206397a340d1a9e">chef_environment</h2>
+
+<ul>
+<li>set
+
+<ul>
+<li>set in recipe</li>
+<li>set when bootstraping</li>
+<li>(<a href="https://docs.chef.io/environments.html">https://docs.chef.io/environments.html</a>)</li>
+</ul></li>
+<li>use
+
+<ul>
+<li>node.chef_environment</li>
+<li>Specifically, chef_environment is a method on the Chef::Node object that returns the value of the node&rsquo;s environment. It is not a node attribute and should not be confused as such.</li>
+<li>(<a href="http://serverfault.com/questions/417696/how-to-find-the-chef-environment-in-a-recipe">http://serverfault.com/questions/417696/how-to-find-the-chef-environment-in-a-recipe</a>)</li>
+</ul></li>
+</ul>
+
+<h1 id="after-upgrade-passenger-and-ruby:33201a3ee4c6d66b2206397a340d1a9e">after upgrade passenger and ruby</h1>
+
+<ul>
+<li>sudo chef-client</li>
+</ul>
+
+<p>see Apache2 be starting or not
+- service &ndash;status-all</p>
+
+<p>see Apache or Passenger is the new one or not
+- ps aux</p>
+
+<p>restart Apache2
+- sudo service apache2 restart</p>
+
+<p>tell passenger to restart
+- touch tmp/restart.txt</p>
+
+<p>apache folder
+/etc/apache2/
+/etc/apache2/mods-available
+/etc/apache2/mods-enables</p>
+
+<p>update .ruby-version</p>
+
+<p>##Debug log
+rails_proj/log/
+/var/apache2/log/&hellip;</p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="http://crokobit.github.io/vim_note/">
+        vim_note
+      </a>
+    </h1>
+
+    <span class="post-date">Tue, Dec 1, 2015</span>
+
+    
+
+<h1 id="delete-lines-contain-something:4519d7576bb70162ace72862ce19266c">delete lines contain something</h1>
+
+<p>:{range}g /xxx/d</p>
+
+<h1 id="substitute-word-within-multiple-file:4519d7576bb70162ace72862ce19266c">substitute word within multiple file</h1>
+
+<p>:arg /sdf/sdf/<em>.</em>
+:argdo %s/cmd/command/ge | update</p>
+
+<p>r.f.
+<a href="http://usevim.com/2012/04/06/search-and-replace-files/">http://usevim.com/2012/04/06/search-and-replace-files/</a></p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="http://crokobit.github.io/deliberate_practice/">
+        deliberate_practice
+      </a>
+    </h1>
+
+    <span class="post-date">Sun, Nov 29, 2015</span>
+
+    <p><a href="http://www.inside.com.tw/2014/06/23/10000-hours">http://www.inside.com.tw/2014/06/23/10000-hours</a></p>
+
+<p>deliberate practice</p>
+
+<ol>
+<li>learn between panic zone and confort zone</li>
+<li>repeated training massively
+..* The Shyness Clinic
+..* repeated parts which has highly difficulity</li>
+<li>effectivefeedback</li>
+<li>practicing with focus along</li>
+</ol>
+
+<p>BOOKS</p>
+
+<p>The Cambridge Handbook of Expertise and Expert Performance
+異數
+Geoff Colvin, Talent is Overrated
+Daniel Coyle, The Talent Code</p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="http://crokobit.github.io/hugo_wercker_set_up/">
+        hugo_wercker_set_up
+      </a>
+    </h1>
+
+    <span class="post-date">Sat, Nov 28, 2015</span>
+
+    
+
+<p>It sucks&hellip;.</p>
+
+<h1 id="config-toml:547bd865ab25db039370c48436e491f8">config.toml</h1>
+
+<pre><code class="language-yml">baseurl = &quot;http://crokobit.github.io/&quot;
+languageCode = &quot;en-us&quot;
+title = &quot;Wanderer&quot;
+</code></pre>
+
+<h1 id="wercker-yml:547bd865ab25db039370c48436e491f8">wercker.yml</h1>
+
+<pre><code class="language-yml">box: debian
+build:
+  steps:
+    - arjen/hugo-build:
+      version: &quot;0.14&quot;
+      theme: detox
+      flags: --buildDrafts=true
+deploy:
+  steps:
+    - install-packages:
+      packages: git ssh-client
+    - lukevivier/gh-pages@0.2.1:
+      token: $GIT_TOKEN
+      repo: crokobit/crokobit.github.io
+      branch: master
+      basedir: public
+</code></pre>
+
+<p>notice should have repository user/user.github.io</p>
+
+<h1 id="add-syntax-highlighting:547bd865ab25db039370c48436e491f8">add syntax highlighting</h1>
+
+<p>ohttps://gohugo.io/extras/highlighting/</p>
+
+<p>use Highlight.js</p>
+
+<p>copy the Highlight.js example below three lines to ./layouts/partials/header.html . It not existed yet! Created it!</p>
+
+<pre><code class="language-html">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://yandex.st/highlightjs/8.0/styles/default.min.css&quot;&gt;
+&lt;script src=&quot;https://yandex.st/highlightjs/8.0/highlight.min.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;hljs.initHighlightingOnLoad();&lt;/script&gt;
+</code></pre>
+
+<p>include different Highlight.js to get different style.</p>
+
+<h1 id="themes:547bd865ab25db039370c48436e491f8">themes</h1>
+
+<p>remember to add you theme (detox here) to git, push it. Otherwise, will show empty page.
+need have at least one content.</p>
+
+<p>submodule
+<a href="http://www.minute.no/2015/04/setting-up-a-git-repository-with-nested-submodules/">http://www.minute.no/2015/04/setting-up-a-git-repository-with-nested-submodules/</a></p>
+
+<p>even already add a submodule, still need to commit it into main git repository. Otherwise, it will generate blank blog.
+<a href="https://discuss.gohugo.io/t/themes-dont-carry-over-on-github-hosting/1098/4">https://discuss.gohugo.io/t/themes-dont-carry-over-on-github-hosting/1098/4</a></p>
+
+<h1 id="deploy-without-wercker:547bd865ab25db039370c48436e491f8">deploy without wercker</h1>
+
+<p><a href="https://blog.carl.tw/2015/04/06/hello-hugo/">https://blog.carl.tw/2015/04/06/hello-hugo/</a></p>
+
+<p>#run locally
+hugo server &ndash;theme=hyde &ndash;buildDrafts
+will show empty page with no theme specified</p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="http://crokobit.github.io/optimize_queries_for_mongodb/">
+        optimize_queries_for_mongodb
+      </a>
+    </h1>
+
+    <span class="post-date">Sat, Nov 28, 2015</span>
+
+    
+
+<h1 id="get-mongodb-log:7037657cc708704df4e0a6506b8cb51b">get mongodb.log</h1>
+
+<h1 id="get-tools:7037657cc708704df4e0a6506b8cb51b">get tools</h1>
+
+<h2 id="mtools:7037657cc708704df4e0a6506b8cb51b">mtools</h2>
+
+<p><a href="https://github.com/rueckstiess/mtools">https://github.com/rueckstiess/mtools</a></p>
+
+<p>Introducing mtools
+<a href="http://blog.mongodb.org/post/85123256973/introducing-mtools">http://blog.mongodb.org/post/85123256973/introducing-mtools</a></p>
+
+<p>install with sudo command</p>
+
+<h3 id="mloginfo:7037657cc708704df4e0a6506b8cb51b">mloginfo</h3>
+
+<p>see the statics of queries
+mloginfo mongodb.log &ndash;queries
+get result like below</p>
+
+<pre><code>namespace                                                     operation    pattern                                                                                                                                                             count     min (ms)    max (ms)    mean (ms)    95%-ile (ms)    sum (ms)
+
+optimis_reporting_production.raw_cases                        query        {&quot;clinic_id&quot;: 1, &quot;date_last_seen&quot;: 1, &quot;discharged&quot;: 1, &quot;one_time_evaluation&quot;: {&quot;$ne&quot;: 1}, &quot;resource_id&quot;: 1}                                                           2250         101       76940         2938        11023.45    6612314
+
+</code></pre>
+
+<h2 id="mlogfilter:7037657cc708704df4e0a6506b8cb51b">mlogfilter</h2>
+
+<p>filte the log by query time, specific operation or collection
+mlogfilter mongodb.log &ndash;slow 10000 &ndash;word optimis_reporting_production.raw_visits &ndash;operation query</p>
+
+<h1 id="add-index:7037657cc708704df4e0a6506b8cb51b">add index</h1>
+
+<ol>
+<li>check ram related things</li>
+</ol>
+
+<p>official guide seems suggest that all index size + working set &lt; RAM size.</p>
+
+<p>check index now
+db.system.indexes.find()</p>
+
+<p>change the data number showed from find
+<a href="http://stackoverflow.com/questions/3705517/how-to-print-out-more-than-20-items-documents-in-mongodbs-shell">http://stackoverflow.com/questions/3705517/how-to-print-out-more-than-20-items-documents-in-mongodbs-shell</a>
+DBQuery.shellBatchSize = 300</p>
+
+<p>see the size of each index
+<a href="http://jasonwilder.com/blog/2012/02/08/optimizing-mongodb-indexes/">http://jasonwilder.com/blog/2012/02/08/optimizing-mongodb-indexes/</a></p>
+
+<p>the operation of with indexed queries
+<a href="http://stackoverflow.com/questions/2811299/mongodb-index-ram-relationship">http://stackoverflow.com/questions/2811299/mongodb-index-ram-relationship</a>
+<a href="http://centaurea.io/blog?name=how-mongodb-indexes-depends-on-ram-and-io-operations">http://centaurea.io/blog?name=how-mongodb-indexes-depends-on-ram-and-io-operations</a></p>
+
+<p>When quering, mongodb load the index that query need into RAM. Not all indexed!!
+loaded index will remain in memory.
+Other query, needing other index, will be loaded to RAM.
+If the size needed for the new query index is bigger than the remained RAM, deleteing previous. If Still have insufficient RAM, partially loading index to RAM, which will cause loading I/O frequently and slowing down the system.
+loading index to RAM also need additional I/O and will slow down the system.</p>
+
+<p>the meaning of db.stats() dataSize, storageSize and fileSize.
+<a href="http://blog.mongolab.com/2014/01/how-big-is-your-mongodb/">http://blog.mongolab.com/2014/01/how-big-is-your-mongodb/</a></p>
+
+<p>extent can be data or indexes.
+extent(data) and extent(indexes) compose collection.
+one collection can have many parts.
+extent(data) contain many sets of document and padding stored, and space.
+mongodb ask disk a space for saving data, the space with data called document, the space without space called padding stored. The spec is allocated by mongodb, other application can not use that even the data there is deleting. So the dataSize will remain even deleting the data.</p>
+
+<p>The dataSize is the size of all document and padding set.</p>
+
+<p>document, padding stored, unused space constitute extent(data).
+storageSize is the sum of extent(data).</p>
+
+<p>fileSize is the sum of extent(data) + extent(index)</p>
+
+<p>maybe can use this
+<a href="https://github.com/jwilder/mongodb-tools">https://github.com/jwilder/mongodb-tools</a></p>
+
+<p><a href="http://blog.mongolab.com/2014/01/managing-disk-space-in-mongodb/">http://blog.mongolab.com/2014/01/managing-disk-space-in-mongodb/</a>
+compact</p>
+
+<p><a href="http://www.briancarpio.com/2012/05/03/mongodb-memory-management/">http://www.briancarpio.com/2012/05/03/mongodb-memory-management/</a>
+use free -tm to check memory used now
+low free RAM is not nessary a problem ?? mongodb will cached recent loaded file to cache as a memory mapped file.</p>
+
+<p>new relic do not show the right RAM information !!
+<a href="https://blog.jixee.me/understanding-new-relic-physical-memory-usage/">https://blog.jixee.me/understanding-new-relic-physical-memory-usage/</a>
+use free or top command</p>
+
+<p>how to add index
+yet
+<a href="https://emptysqua.re/blog/optimizing-mongodb-compound-indexes/#range">https://emptysqua.re/blog/optimizing-mongodb-compound-indexes/#range</a></p>
+
+<p>Great article!
+<a href="http://snmaynard.com/2012/10/17/things-i-wish-i-knew-about-mongodb-a-year-ago/">http://snmaynard.com/2012/10/17/things-i-wish-i-knew-about-mongodb-a-year-ago/</a></p>
+
+<pre><code>Index all the queries
+
+When I first started using Mongo, I would sometimes run queries on an ad-hoc basis or from a cron job. I initially left those queries unindexed, as they weren’t user facing and weren’t run often. However this caused performance problems for other indexed queries, as the unindexed queries do a lot of disk reads, which impacted the retrieval of any documents that weren’t cached. I decided to make sure the queries are at least partially indexed to prevent things like this happening.
+
+
+Always run explain on new queries
+</code></pre>
+
+<p>we have replication set</p>
+
+<p>Defragmentation</p>
+
+<p>upgrade mongodb</p>
+
+<p>use db.currentOp() to see the background job. Can use that for seeing the progress of creating index.</p>
+
+<h1 id="add-index-throgh-mongoid:7037657cc708704df4e0a6506b8cb51b">add index throgh mongoid</h1>
+
+<p>add code related to adding or deleting index
+run below code to remove incosistant code or add extra index</p>
+
+<pre><code>bundle exec rake db:mongoid:remove_undefined_indexes RAILS_ENV=production
+bundle exec rake db:mongoid:create_indexes RAILS_ENV=production
+</code></pre>
+
+<p>error may occured if already the index with different option already created. Need to add debug code to gem mongoid for debugging, for getting model name and database name and options.</p>
+
+<h2 id="lock:7037657cc708704df4e0a6506b8cb51b">lock</h2>
+
+<p>have write lock  when deleting index
+have global lock（read and write lock, all mongodb） when deleting db
+can add index under background, so have no lock</p>
+
+  </div>
+  
+</div>
+</div>
+
+  </body>
+</html>

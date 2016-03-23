@@ -1,0 +1,124 @@
+	<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.14" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title> hugo_wercker_set_up &middot; Wanderer </title>
+
+  
+  <link rel="stylesheet" href="http://crokobit.github.io/css/poole.css">
+  <link rel="stylesheet" href="http://crokobit.github.io/css/syntax.css">
+  <link rel="stylesheet" href="http://crokobit.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="Wanderer" />
+</head>
+
+	<body class="">
+		<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://crokobit.github.io/"><h1>Wanderer</h1></a>
+      <p class="lead">
+      An elegant open source and mobile first theme for <a href="http://hugo.spf13.com">hugo</a> made by <a href="http://twitter.com/mdo">@mdo</a>. Originally made for Jekyll.
+      </p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li><a href="/">Home</a> </li>
+      
+    </ul>
+
+    <p>&copy; 2016. All rights reserved. </p>
+  </div>
+</div>
+
+
+		<div class="content container">
+			<div class="post">
+			 	<h1>hugo_wercker_set_up</h1>
+			  <span class="post-date">Sat, Nov 28, 2015</span>
+			      
+
+<p>It sucks&hellip;.</p>
+
+<h1 id="config-toml:547bd865ab25db039370c48436e491f8">config.toml</h1>
+
+<pre><code class="language-yml">baseurl = &quot;http://crokobit.github.io/&quot;
+languageCode = &quot;en-us&quot;
+title = &quot;Wanderer&quot;
+</code></pre>
+
+<h1 id="wercker-yml:547bd865ab25db039370c48436e491f8">wercker.yml</h1>
+
+<pre><code class="language-yml">box: debian
+build:
+  steps:
+    - arjen/hugo-build:
+      version: &quot;0.14&quot;
+      theme: detox
+      flags: --buildDrafts=true
+deploy:
+  steps:
+    - install-packages:
+      packages: git ssh-client
+    - lukevivier/gh-pages@0.2.1:
+      token: $GIT_TOKEN
+      repo: crokobit/crokobit.github.io
+      branch: master
+      basedir: public
+</code></pre>
+
+<p>notice should have repository user/user.github.io</p>
+
+<h1 id="add-syntax-highlighting:547bd865ab25db039370c48436e491f8">add syntax highlighting</h1>
+
+<p>ohttps://gohugo.io/extras/highlighting/</p>
+
+<p>use Highlight.js</p>
+
+<p>copy the Highlight.js example below three lines to ./layouts/partials/header.html . It not existed yet! Created it!</p>
+
+<pre><code class="language-html">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://yandex.st/highlightjs/8.0/styles/default.min.css&quot;&gt;
+&lt;script src=&quot;https://yandex.st/highlightjs/8.0/highlight.min.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;hljs.initHighlightingOnLoad();&lt;/script&gt;
+</code></pre>
+
+<p>include different Highlight.js to get different style.</p>
+
+<h1 id="themes:547bd865ab25db039370c48436e491f8">themes</h1>
+
+<p>remember to add you theme (detox here) to git, push it. Otherwise, will show empty page.
+need have at least one content.</p>
+
+<p>submodule
+<a href="http://www.minute.no/2015/04/setting-up-a-git-repository-with-nested-submodules/">http://www.minute.no/2015/04/setting-up-a-git-repository-with-nested-submodules/</a></p>
+
+<p>even already add a submodule, still need to commit it into main git repository. Otherwise, it will generate blank blog.
+<a href="https://discuss.gohugo.io/t/themes-dont-carry-over-on-github-hosting/1098/4">https://discuss.gohugo.io/t/themes-dont-carry-over-on-github-hosting/1098/4</a></p>
+
+<h1 id="deploy-without-wercker:547bd865ab25db039370c48436e491f8">deploy without wercker</h1>
+
+<p><a href="https://blog.carl.tw/2015/04/06/hello-hugo/">https://blog.carl.tw/2015/04/06/hello-hugo/</a></p>
+
+<p>#run locally
+hugo server &ndash;theme=hyde &ndash;buildDrafts
+will show empty page with no theme specified</p>
+
+			</div>
+
+			
+		</div>
+
+  </body>
+</html>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Rubies on Wanderer</title>
+    <link>http://crokobit.github.io/ruby/</link>
+    <description>Recent content in Rubies on Wanderer</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 01 Jan 2016 17:10:40 +0800</lastBuildDate>
+    <atom:link href="http://crokobit.github.io/ruby/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>lambda_and_proc</title>
+      <link>http://crokobit.github.io/ruby/lambda_and_proc/</link>
+      <pubDate>Fri, 01 Jan 2016 17:10:40 +0800</pubDate>
+      
+      <guid>http://crokobit.github.io/ruby/lambda_and_proc/</guid>
+      <description>
+
+&lt;p&gt;Differences between Procs and Lambdas&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;received parameter behavior with wrong number parameter
+
+&lt;ul&gt;
+&lt;li&gt;Proc -&amp;gt; no error&lt;/li&gt;
+&lt;li&gt;lambda -&amp;gt; error&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;return behavior
+
+&lt;ul&gt;
+&lt;li&gt;Proc -&amp;gt; return to outside where Proc be called&lt;/li&gt;
+&lt;li&gt;lambda -&amp;gt; return to where lambda be called&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Proc.new == lambda, can parameterize&lt;/p&gt;
+
+&lt;p&gt;{} == do &amp;hellip; end, only can be used by putting after the function.
+Still generating a Proc object when doing this.&lt;/p&gt;
+
+&lt;p&gt;&amp;amp;block for passing Block(Proc) into function&lt;/p&gt;
+
+&lt;p&gt;yield = block.call&lt;/p&gt;
+
+&lt;p&gt;proc is object.
+block( do..end, {}, &amp;amp;block) isn&amp;rsquo;t.
+So block can not be assigned to variable.&lt;/p&gt;
+
+&lt;p&gt;can only pass one block to function(syntax constraint),
+but can have multiple proc parameter.&lt;/p&gt;
+
+&lt;p&gt;can pass parameter to yield or &amp;amp;block.call.&lt;/p&gt;
+
+&lt;p&gt;&amp;ldquo;code block has the scope where it is defined, it can use the variable can be found when defining itself&amp;rdquo;
+From Eloquent Ruby&lt;/p&gt;
+
+&lt;p&gt;can use varaible excute the block and catch the return value for excute arround purpose.&lt;/p&gt;
+
+&lt;p&gt;The whole idea of execute around is that the caller is guaranteed that this will happen before the code block fires and that will happen after.
+From Eloquent Ruby&lt;/p&gt;
+
+&lt;p&gt;execute around make your code a bit easier to read.
+e.g. say_with_block{ &amp;ldquo;something&amp;rdquo; }&lt;/p&gt;
+
+&lt;p&gt;block can be applied when needing to lazy initializing.&lt;/p&gt;
+
+&lt;h2 id=&#34;elogent-ruby-ch19:8f371f8b4a6b21aa2f27bb36b0a89aaa&#34;&gt;Elogent ruby ch19&lt;/h2&gt;
+
+&lt;p&gt;split a function of different responsibility to anoteher class.&lt;/p&gt;
+
+&lt;p&gt;can use block to pass the function into a class.&lt;/p&gt;
+
+&lt;p&gt;can define constant lambda of that function.&lt;/p&gt;
+
+&lt;p&gt;block holds all local variable of its outside scope.
+this will lenthen the life cycle of those object.
+clean the object - especially really big object, e.g. a super big array - the block no use.&lt;/p&gt;
+
+&lt;p&gt;r.f.
+&lt;a href=&#34;http://awaxman11.github.io/blog/2013/08/05/what-is-the-difference-between-a-block/&#34;&gt;http://awaxman11.github.io/blog/2013/08/05/what-is-the-difference-between-a-block/&lt;/a&gt;
+&lt;a href=&#34;http://railsfun.tw/t/method-block-yield-proc-lambda/110&#34;&gt;http://railsfun.tw/t/method-block-yield-proc-lambda/110&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>private_and_protected</title>
+      <link>http://crokobit.github.io/ruby/private_and_protected/</link>
+      <pubDate>Wed, 30 Dec 2015 18:17:09 +0800</pubDate>
+      
+      <guid>http://crokobit.github.io/ruby/private_and_protected/</guid>
+      <description>&lt;p&gt;private and protected
+- private method must have no receiver
+- protected method can have receiver; however, must be called inside same type of class.&lt;/p&gt;
+
+&lt;p&gt;protected function can be used by same class object or child object&lt;/p&gt;
+
+&lt;p&gt;r.f.
+&lt;a href=&#34;http://culttt.com/2015/06/03/the-difference-between-public-protected-and-private-methods-in-ruby/&#34;&gt;http://culttt.com/2015/06/03/the-difference-between-public-protected-and-private-methods-in-ruby/&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

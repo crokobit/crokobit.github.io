@@ -1,0 +1,113 @@
+	<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.14" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title> chef_node_attribute_dependency_between_cookbook &middot; Wanderer </title>
+
+  
+  <link rel="stylesheet" href="http://crokobit.github.io/css/poole.css">
+  <link rel="stylesheet" href="http://crokobit.github.io/css/syntax.css">
+  <link rel="stylesheet" href="http://crokobit.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="Wanderer" />
+</head>
+
+	<body class="">
+		<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://crokobit.github.io/"><h1>Wanderer</h1></a>
+      <p class="lead">
+      An elegant open source and mobile first theme for <a href="http://hugo.spf13.com">hugo</a> made by <a href="http://twitter.com/mdo">@mdo</a>. Originally made for Jekyll.
+      </p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li><a href="/">Home</a> </li>
+      
+    </ul>
+
+    <p>&copy; 2016. All rights reserved. </p>
+  </div>
+</div>
+
+
+		<div class="content container">
+			<div class="post">
+			 	<h1>chef_node_attribute_dependency_between_cookbook</h1>
+			  <span class="post-date">Mon, Mar 21, 2016</span>
+			      
+
+<h1 id="chef-node-attribute-dependency-between-cookbook-derived-attribute:988af73b670e742c75a24cba40023286">Chef Node Attribute Dependency Between Cookbook (Derived Attribute)</h1>
+
+<ul>
+<li>chef have two stages when running <code>chef-client</code>
+1 Complie Time / Phase
+2 Run Time (Converage Phase)</li>
+<li>(<a href="http://stackoverflow.com/questions/25980820/please-explain-compile-time-vs-run-time-in-chef-recipes">http://stackoverflow.com/questions/25980820/please-explain-compile-time-vs-run-time-in-chef-recipes</a>)</li>
+</ul>
+
+<h1 id="when-using-node-attribute-in-compile-time-the-attribute-will-not-be-the-one-effected-after-running-chef-client:988af73b670e742c75a24cba40023286">When using node attribute in compile time, the attribute will not be the one effected after running <code>chef-client</code></h1>
+
+<h1 id="solution:988af73b670e742c75a24cba40023286">Solution</h1>
+
+<ul>
+<li><a href="https://coderanger.net/derived-attributes/">Delayed Interpolation</a></li>
+<li>(<a href="https://christinemdraper.wordpress.com/2014/10/06/avoiding-the-possible-pitfalls-of-derived-attributes/">https://christinemdraper.wordpress.com/2014/10/06/avoiding-the-possible-pitfalls-of-derived-attributes/</a>)
+
+<ul>
+<li>for cookbook user
+
+<ul>
+<li>delay assignement %{} ???</li>
+<li>condition assiginement</li>
+</ul></li>
+</ul></li>
+<li><a href="http://stackoverflow.com/questions/15816208/chef-recipes-setting-node-attributes-in-ruby-block">Ruby Block</a>
+
+<ul>
+<li>Because the value are all calculate in compile time, changing the defalut value in other cookbook will not effect the action use the default value in other cookbooks. <a href="https://gist.github.com/arangamani/4659646">example</a></li>
+<li>fetch your attribute from file or data bag at run time.</li>
+</ul></li>
+<li>Role attribute priority is greater than cookbook. Can set attrinutes we want in role.
+-<a href="https://docs.chef.io/resource_common.html#lazy-attribute-evaluation">Lazy Evaluation</a>
+
+<ul>
+<li><code>lazy { ruby_code }</code></li>
+</ul></li>
+</ul>
+
+<h1 id="q:988af73b670e742c75a24cba40023286">Q</h1>
+
+<ul>
+<li>default = node ? -&gt;YES</li>
+<li><a href="https://docs.chef.io/attributes.html">https://docs.chef.io/attributes.html</a></li>
+</ul>
+
+<pre><code class="language-ruby">    An attribute file is located in the attributes/ sub-directory for a cookbook. When a cookbook is run against a node, the attributes contained in all attribute files are evaluated in the context of the node object. Node methods (when present) are used to set attribute values on a node. For example, the apache2 cookbook contains an attribute file called default.rb, which contains the following attributes:
+    default['apache']['dir']          = '/etc/apache2'
+    default['apache']['listen_ports'] = [ '80','443' ]
+    The use of the node object (node) is implicit in the previous example; the following example defines the node object itself as part of the attribute:
+    node.default['apache']['dir']          = '/etc/apache2'
+    node.default['apache']['listen_ports'] = [ '80','443' ]
+</code></pre>
+
+			</div>
+
+			
+		</div>
+
+  </body>
+</html>

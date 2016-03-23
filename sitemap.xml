@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <url>
+    <loc>http://crokobit.github.io/</loc>
+    <lastmod>2016-03-21T16:21:11+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://crokobit.github.io/chef_node_attribute_dependency_between_cookbook/</loc>
+    <lastmod>2016-03-21T16:21:11+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://crokobit.github.io/rabbitmq/</loc>
+    <lastmod>2016-03-08T13:33:45+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://crokobit.github.io/pow/</loc>
+    <lastmod>2016-02-01T18:17:17+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://crokobit.github.io/build_rails/</loc>
+    <lastmod>2016-01-10T17:23:05+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://crokobit.github.io/git/</loc>
+    <lastmod>2016-01-10T17:13:18+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://crokobit.github.io/PL/</loc>
+    <lastmod>2016-01-10T17:11:33+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://crokobit.github.io/ruby/lambda_and_proc/</loc>
+    <lastmod>2016-01-01T17:10:40+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://crokobit.github.io/ruby/private_and_protected/</loc>
+    <lastmod>2015-12-30T18:17:09+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://crokobit.github.io/include_and_extend_for_ruby/</loc>
+    <lastmod>2015-12-28T14:53:50+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://crokobit.github.io/neovim/</loc>
+    <lastmod>2015-12-26T23:12:51+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://crokobit.github.io/callback/</loc>
+    <lastmod>2015-12-21T15:29:45+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://crokobit.github.io/chef/</loc>
+    <lastmod>2015-12-17T10:11:08+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://crokobit.github.io/vim_note/</loc>
+    <lastmod>2015-12-01T11:47:13+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://crokobit.github.io/deliberate_practice/</loc>
+    <lastmod>2015-11-29T17:34:21+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://crokobit.github.io/hugo_wercker_set_up/</loc>
+    <lastmod>2015-11-28T21:43:11+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://crokobit.github.io/optimize_queries_for_mongodb/</loc>
+    <lastmod>2015-11-28T21:25:03+08:00</lastmod>
+  </url>
+  
+</urlset>
